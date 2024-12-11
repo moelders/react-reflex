@@ -18,6 +18,7 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 var _ReflexSplitter = _interopRequireDefault(require("./ReflexSplitter"));
 var _ReflexEvents = _interopRequireDefault(require("./ReflexEvents"));
 var _utilities = require("./utilities");
+var _context = require("./context");
 var _propTypes = _interopRequireDefault(require("prop-types"));
 var _react = _interopRequireDefault(require("react"));
 require("./Polyfills");
@@ -32,11 +33,11 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
   (0, _inherits2.default)(ReflexContainer, _React$Component);
   /////////////////////////////////////////////////////////
   // orientation: Orientation of the layout container
-  //              valid values are ['horizontal', 'vertical'] 
+  //              valid values are ['horizontal', 'vertical']
   // maxRecDepth: Maximun recursion depth to solve initial flex
   //              of layout elements based on user provided values
-  // className: Space separated classnames to apply custom styles 
-  //            to the layout container  
+  // className: Space separated classnames to apply custom styles
+  //            to the layout container
   // style: allows passing inline style to the container
   /////////////////////////////////////////////////////////
 
@@ -97,7 +98,7 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
         return element.ref;
       }) : [];
       var elements = _this.children.filter(function (child) {
-        return !_ReflexSplitter.default.isA(child) && resizedRefs.includes(child.ref);
+        return !_ReflexSplitter.default.isA(child, _this.contextValue) && resizedRefs.includes(child.ref);
       });
       _this.emitElementsEvent(elements, 'onStopResize');
       _this.setState({
@@ -134,6 +135,9 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
       flexData: []
     };
     _this.ref = _react.default.createRef();
+    _this.contextValue = {
+      components: _this.props.components
+    };
     return _this;
   }
   (0, _createClass2.default)(ReflexContainer, [{
@@ -189,9 +193,9 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
 
     //   const children = this.getValidChildren(props)
 
-    //   if (children.length !== this.state.flexData.length || 
-    //     props.orientation !== this.props.orientation || 
-    //     this.flexHasChanged(props)) 
+    //   if (children.length !== this.state.flexData.length ||
+    //     props.orientation !== this.props.orientation ||
+    //     this.flexHasChanged(props))
     //   {
     //     const flexData = this.computeFlexData(
     //       children, props)
@@ -209,7 +213,7 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
     //       windowResizeAware: props.windowResizeAware
     //     })
     //   }
-    // } 
+    // }
 
     /////////////////////////////////////////////////////////
     // attempts to preserve current flex on window resize
@@ -368,13 +372,13 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
       if (direction > 0) {
         if (idx < this.children.length - 2) {
           var child = this.children[idx + 2];
-          var typeCheck = _ReflexSplitter.default.isA(child);
+          var typeCheck = _ReflexSplitter.default.isA(child, this.contextValue);
           return typeCheck && child.props.propagate;
         }
       } else {
         if (idx > 2) {
           var _child = this.children[idx - 2];
-          var _typeCheck = _ReflexSplitter.default.isA(_child);
+          var _typeCheck = _ReflexSplitter.default.isA(_child, this.contextValue);
           return _typeCheck && _child.props.propagate;
         }
       }
@@ -566,7 +570,7 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
       var pixelFlex = this.computePixelFlex(props.orientation);
       var computeFreeFlex = function computeFreeFlex(flexData) {
         return flexData.reduce(function (sum, entry) {
-          if (!_ReflexSplitter.default.isA(entry) && entry.constrained) {
+          if (!_ReflexSplitter.default.isA(entry, _this3.contextValue) && entry.constrained) {
             return sum - entry.flex;
           }
           return sum;
@@ -574,7 +578,7 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
       };
       var computeFreeElements = function computeFreeElements(flexData) {
         return flexData.reduce(function (sum, entry) {
-          if (!_ReflexSplitter.default.isA(entry) && !entry.constrained) {
+          if (!_ReflexSplitter.default.isA(entry, _this3.contextValue) && !entry.constrained) {
             return sum + 1;
           }
           return sum;
@@ -599,7 +603,7 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
         var freeElements = computeFreeElements(flexDataIn);
         var freeFlex = computeFreeFlex(flexDataIn);
         var flexDataOut = flexDataIn.map(function (entry) {
-          if (_ReflexSplitter.default.isA(entry)) {
+          if (_ReflexSplitter.default.isA(entry, _this3.contextValue)) {
             return entry;
           }
           var proposedFlex = !entry.constrained ? freeFlex / freeElements : entry.flex;
@@ -616,7 +620,7 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
       var flexData = computeFlexDataRec(flexDataInit);
       return flexData.map(function (entry) {
         return {
-          flex: !_ReflexSplitter.default.isA(entry) ? entry.flex : 0.0,
+          flex: !_ReflexSplitter.default.isA(entry, _this3.contextValue) ? entry.flex : 0.0,
           ref: _react.default.createRef()
         };
       });
@@ -660,11 +664,13 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
         });
         return _react.default.cloneElement(child, newProps);
       });
-      return /*#__PURE__*/_react.default.createElement("div", (0, _extends2.default)({}, (0, _utilities.getDataProps)(this.props), {
+      return /*#__PURE__*/_react.default.createElement(_context.ReflexProvider, {
+        value: this.contextValue
+      }, /*#__PURE__*/_react.default.createElement("div", (0, _extends2.default)({}, (0, _utilities.getDataProps)(this.props), {
         style: this.props.style,
         className: className,
         ref: this.ref
-      }), this.children);
+      }), this.children));
     }
   }]);
   return ReflexContainer;
@@ -674,12 +680,17 @@ var ReflexContainer = exports.default = /*#__PURE__*/function (_React$Component)
   orientation: _propTypes.default.oneOf(['horizontal', 'vertical']),
   maxRecDepth: _propTypes.default.number,
   className: _propTypes.default.string,
-  style: _propTypes.default.object
+  style: _propTypes.default.object,
+  components: _propTypes.default.shape({
+    Splitter: _propTypes.default.elementType,
+    Handle: _propTypes.default.elementType
+  })
 });
 (0, _defineProperty2.default)(ReflexContainer, "defaultProps", {
   orientation: 'horizontal',
   windowResizeAware: false,
   maxRecDepth: 100,
   className: '',
-  style: {}
+  style: {},
+  components: {}
 });

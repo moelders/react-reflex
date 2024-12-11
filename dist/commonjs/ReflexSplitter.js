@@ -145,12 +145,12 @@ var ReflexSplitter = exports.default = /*#__PURE__*/function (_React$Component) 
     // or wraps a splitter
     //
     /////////////////////////////////////////////////////////
-    function isA(element) {
-      var _element$props;
-      if (!element) {
-        return false;
-      }
-      return (process.env.NODE_ENV === 'development' ? element.type === /*#__PURE__*/_react.default.createElement(ReflexSplitter, null).type : element.type === ReflexSplitter) || element.name === 'reflex-splitter' || ((_element$props = element.props) === null || _element$props === void 0 ? void 0 : _element$props.name) === 'reflex-splitter';
+    function isA(element, _ref) {
+      var components = _ref.components;
+      var _ref2 = components || {},
+        _ref2$Splitter = _ref2.Splitter,
+        _Splitter = _ref2$Splitter === void 0 ? ReflexSplitter : _ref2$Splitter;
+      return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
     }
   }]);
   return ReflexSplitter;

@@ -10,17 +10,18 @@ import _defineProperty from "@babel/runtime/helpers/defineProperty";
 import ReflexSplitter from './ReflexSplitter';
 import ReflexEvents from './ReflexEvents';
 import { getDataProps } from './utilities';
+import { ReflexProvider } from './context';
 import PropTypes from 'prop-types';
 import React from 'react';
 import './Polyfills';
 export default class ReflexContainer extends React.Component {
   /////////////////////////////////////////////////////////
   // orientation: Orientation of the layout container
-  //              valid values are ['horizontal', 'vertical'] 
+  //              valid values are ['horizontal', 'vertical']
   // maxRecDepth: Maximun recursion depth to solve initial flex
   //              of layout elements based on user provided values
-  // className: Space separated classnames to apply custom styles 
-  //            to the layout container  
+  // className: Space separated classnames to apply custom styles
+  //            to the layout container
   // style: allows passing inline style to the container
   /////////////////////////////////////////////////////////
 
@@ -79,7 +80,7 @@ export default class ReflexContainer extends React.Component {
         return element.ref;
       }) : [];
       const elements = this.children.filter(child => {
-        return !ReflexSplitter.isA(child) && resizedRefs.includes(child.ref);
+        return !ReflexSplitter.isA(child, this.contextValue) && resizedRefs.includes(child.ref);
       });
       this.emitElementsEvent(elements, 'onStopResize');
       this.setState({
@@ -116,6 +117,9 @@ export default class ReflexContainer extends React.Component {
       flexData: []
     };
     this.ref = React.createRef();
+    this.contextValue = {
+      components: this.props.components
+    };
   }
   componentDidMount() {
     const flexData = this.computeFlexData();
@@ -163,9 +167,9 @@ export default class ReflexContainer extends React.Component {
 
   //   const children = this.getValidChildren(props)
 
-  //   if (children.length !== this.state.flexData.length || 
-  //     props.orientation !== this.props.orientation || 
-  //     this.flexHasChanged(props)) 
+  //   if (children.length !== this.state.flexData.length ||
+  //     props.orientation !== this.props.orientation ||
+  //     this.flexHasChanged(props))
   //   {
   //     const flexData = this.computeFlexData(
   //       children, props)
@@ -183,7 +187,7 @@ export default class ReflexContainer extends React.Component {
   //       windowResizeAware: props.windowResizeAware
   //     })
   //   }
-  // } 
+  // }
 
   /////////////////////////////////////////////////////////
   // attempts to preserve current flex on window resize
@@ -330,13 +334,13 @@ export default class ReflexContainer extends React.Component {
     if (direction > 0) {
       if (idx < this.children.length - 2) {
         const child = this.children[idx + 2];
-        const typeCheck = ReflexSplitter.isA(child);
+        const typeCheck = ReflexSplitter.isA(child, this.contextValue);
         return typeCheck && child.props.propagate;
       }
     } else {
       if (idx > 2) {
         const child = this.children[idx - 2];
-        const typeCheck = ReflexSplitter.isA(child);
+        const typeCheck = ReflexSplitter.isA(child, this.contextValue);
         return typeCheck && child.props.propagate;
       }
     }
@@ -506,7 +510,7 @@ export default class ReflexContainer extends React.Component {
     const pixelFlex = this.computePixelFlex(props.orientation);
     const computeFreeFlex = flexData => {
       return flexData.reduce((sum, entry) => {
-        if (!ReflexSplitter.isA(entry) && entry.constrained) {
+        if (!ReflexSplitter.isA(entry, this.contextValue) && entry.constrained) {
           return sum - entry.flex;
         }
         return sum;
@@ -514,7 +518,7 @@ export default class ReflexContainer extends React.Component {
     };
     const computeFreeElements = flexData => {
       return flexData.reduce((sum, entry) => {
-        if (!ReflexSplitter.isA(entry) && !entry.constrained) {
+        if (!ReflexSplitter.isA(entry, this.contextValue) && !entry.constrained) {
           return sum + 1;
         }
         return sum;
@@ -538,7 +542,7 @@ export default class ReflexContainer extends React.Component {
       const freeElements = computeFreeElements(flexDataIn);
       const freeFlex = computeFreeFlex(flexDataIn);
       const flexDataOut = flexDataIn.map(entry => {
-        if (ReflexSplitter.isA(entry)) {
+        if (ReflexSplitter.isA(entry, this.contextValue)) {
           return entry;
         }
         const proposedFlex = !entry.constrained ? freeFlex / freeElements : entry.flex;
@@ -555,7 +559,7 @@ export default class ReflexContainer extends React.Component {
     const flexData = computeFlexDataRec(flexDataInit);
     return flexData.map(entry => {
       return {
-        flex: !ReflexSplitter.isA(entry) ? entry.flex : 0.0,
+        flex: !ReflexSplitter.isA(entry, this.contextValue) ? entry.flex : 0.0,
         ref: React.createRef()
       };
     });
@@ -594,11 +598,13 @@ export default class ReflexContainer extends React.Component {
       });
       return React.cloneElement(child, newProps);
     });
-    return /*#__PURE__*/React.createElement("div", _extends({}, getDataProps(this.props), {
+    return /*#__PURE__*/React.createElement(ReflexProvider, {
+      value: this.contextValue
+    }, /*#__PURE__*/React.createElement("div", _extends({}, getDataProps(this.props), {
       style: this.props.style,
       className: className,
       ref: this.ref
-    }), this.children);
+    }), this.children));
   }
 }
 _defineProperty(ReflexContainer, "propTypes", {
@@ -606,12 +612,17 @@ _defineProperty(ReflexContainer, "propTypes", {
   orientation: PropTypes.oneOf(['horizontal', 'vertical']),
   maxRecDepth: PropTypes.number,
   className: PropTypes.string,
-  style: PropTypes.object
+  style: PropTypes.object,
+  components: PropTypes.shape({
+    Splitter: PropTypes.elementType,
+    Handle: PropTypes.elementType
+  })
 });
 _defineProperty(ReflexContainer, "defaultProps", {
   orientation: 'horizontal',
   windowResizeAware: false,
   maxRecDepth: 100,
   className: '',
-  style: {}
+  style: {},
+  components: {}
 });

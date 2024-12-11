@@ -15,12 +15,13 @@ export default class ReflexSplitter extends React.Component {
   // or wraps a splitter
   //
   /////////////////////////////////////////////////////////
-  static isA(element) {
-    var _element$props;
-    if (!element) {
-      return false;
-    }
-    return (process.env.NODE_ENV === 'development' ? element.type === /*#__PURE__*/React.createElement(ReflexSplitter, null).type : element.type === ReflexSplitter) || element.name === 'reflex-splitter' || ((_element$props = element.props) === null || _element$props === void 0 ? void 0 : _element$props.name) === 'reflex-splitter';
+  static isA(element, {
+    components
+  }) {
+    const {
+      Splitter: _Splitter = ReflexSplitter
+    } = components || {};
+    return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
   }
   constructor(props) {
     super(props);

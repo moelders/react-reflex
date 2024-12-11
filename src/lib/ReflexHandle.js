@@ -4,15 +4,15 @@
 // June 2018
 //
 ///////////////////////////////////////////////////////////
-import {getDataProps} from './utilities'
-import PropTypes from 'prop-types'
-import React from 'react'
+import { getDataProps } from './utilities';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 export default class ReflexHandle extends React.Component {
 
   ref = React.createRef()
 
-  
+
   static propTypes = {
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -27,8 +27,8 @@ export default class ReflexHandle extends React.Component {
   }
 
   static defaultProps = {
-    document: typeof document === 'undefined' 
-      ? null 
+    document: typeof document === 'undefined'
+      ? null
       : document,
     onStartResize: null,
     onStopResize: null,
@@ -37,16 +37,11 @@ export default class ReflexHandle extends React.Component {
     className: '',
     style: {}
   }
-  
-  static isA (element) {
-    if (!element) {
-      return false
-    }
 
-    return (process.env.NODE_ENV === 'development'
-      ? element.type === (<ReflexHandle/>).type
-      : element.type === ReflexHandle
-    ) || element.name === 'reflex-handle' || element.props?.name === 'reflex-handle';
+  static isA (element, { components }) {
+    const { Handle: _Handle = ReflexHandle } = components || {};
+
+    return element.type === _Handle || element.type.displayName === _Handle.displayName;
   }
 
   constructor (props) {
@@ -56,9 +51,9 @@ export default class ReflexHandle extends React.Component {
     }
     this.document = props.document
   }
-  
+
   componentDidMount () {
-    
+
     if (!this.document) {
       return
     }
@@ -83,7 +78,7 @@ export default class ReflexHandle extends React.Component {
         passive: false
       })
   }
-  
+
   componentWillUnmount () {
 
     if (!this.document) {
@@ -107,7 +102,7 @@ export default class ReflexHandle extends React.Component {
       this.onMouseMove)
 
     if (this.state.active) {
-    
+
       this.props.events.emit('stopResize', {
         index: this.props.index,
         event: null
@@ -134,13 +129,13 @@ export default class ReflexHandle extends React.Component {
           component: this,
           domElement
         })
-      }    
+      }
 
       event.stopPropagation()
       event.preventDefault()
     }
   }
-  
+
   onMouseDown = (event) => {
 
     this.setState({
@@ -189,7 +184,7 @@ export default class ReflexHandle extends React.Component {
       })
     }
   }
-  
+
   render () {
 
     const className = [

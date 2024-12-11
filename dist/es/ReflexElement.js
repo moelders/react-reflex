@@ -9,6 +9,7 @@ import _defineProperty from "@babel/runtime/helpers/defineProperty";
 ///////////////////////////////////////////////////////////
 import ReflexHandle from './ReflexHandle';
 import { getDataProps } from './utilities';
+import { ReflexContext } from './context';
 import throttle from 'lodash.throttle';
 import Measure from 'react-measure';
 import PropTypes from 'prop-types';
@@ -50,7 +51,7 @@ class SizeAwareReflexElement extends React.Component {
       return !!child;
     });
     return React.Children.map(validChildren, child => {
-      if (this.props.withHandle || ReflexHandle.isA(child)) {
+      if (this.props.withHandle || ReflexHandle.isA(child, this.context || {})) {
         return React.cloneElement(child, _objectSpread({
           dimensions: propagateDimensions && this.state
         }, child.props, {
@@ -82,6 +83,7 @@ class SizeAwareReflexElement extends React.Component {
     });
   }
 }
+_defineProperty(SizeAwareReflexElement, "contextType", ReflexContext);
 class ReflexElement extends React.Component {
   constructor(props) {
     super(props);
@@ -114,7 +116,7 @@ class ReflexElement extends React.Component {
       return !!child;
     });
     return React.Children.map(validChildren, child => {
-      if (this.props.withHandle || ReflexHandle.isA(child)) {
+      if (this.props.withHandle || ReflexHandle.isA(child, this.context || {})) {
         return React.cloneElement(child, _objectSpread({}, child.props, {
           index: this.props.index - 1,
           events: this.props.events
@@ -152,6 +154,7 @@ _defineProperty(ReflexElement, "defaultProps", {
   direction: [1],
   className: ''
 });
+_defineProperty(ReflexElement, "contextType", ReflexContext);
 export default React.forwardRef((props, ref) => {
   return /*#__PURE__*/React.createElement(ReflexElement, _extends({
     innerRef: ref

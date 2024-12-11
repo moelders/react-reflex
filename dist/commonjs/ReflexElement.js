@@ -19,6 +19,7 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 var _ReflexHandle = _interopRequireDefault(require("./ReflexHandle"));
 var _utilities = require("./utilities");
+var _context2 = require("./context");
 var _lodash = _interopRequireDefault(require("lodash.throttle"));
 var _reactMeasure = _interopRequireDefault(require("react-measure"));
 var _propTypes = _interopRequireDefault(require("prop-types"));
@@ -74,7 +75,7 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
         return !!child;
       });
       return _react.default.Children.map(validChildren, function (child) {
-        if (_this2.props.withHandle || _ReflexHandle.default.isA(child)) {
+        if (_this2.props.withHandle || _ReflexHandle.default.isA(child, _this2.context || {})) {
           return _react.default.cloneElement(child, (0, _objectSpread2.default)({
             dimensions: propagateDimensions && _this2.state
           }, child.props, {
@@ -110,6 +111,7 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
   }]);
   return SizeAwareReflexElement;
 }(_react.default.Component);
+(0, _defineProperty2.default)(SizeAwareReflexElement, "contextType", _context2.ReflexContext);
 var ReflexElement = /*#__PURE__*/function (_React$Component2) {
   (0, _inherits2.default)(ReflexElement, _React$Component2);
   function ReflexElement(props) {
@@ -182,7 +184,7 @@ var ReflexElement = /*#__PURE__*/function (_React$Component2) {
         return !!child;
       });
       return _react.default.Children.map(validChildren, function (child) {
-        if (_this5.props.withHandle || _ReflexHandle.default.isA(child)) {
+        if (_this5.props.withHandle || _ReflexHandle.default.isA(child, _this5.context || {})) {
           return _react.default.cloneElement(child, (0, _objectSpread2.default)({}, child.props, {
             index: _this5.props.index - 1,
             events: _this5.props.events
@@ -234,6 +236,7 @@ var ReflexElement = /*#__PURE__*/function (_React$Component2) {
   direction: [1],
   className: ''
 });
+(0, _defineProperty2.default)(ReflexElement, "contextType", _context2.ReflexContext);
 var _default = exports.default = _react.default.forwardRef(function (props, ref) {
   return /*#__PURE__*/_react.default.createElement(ReflexElement, (0, _extends2.default)({
     innerRef: ref

@@ -4,18 +4,21 @@
 // December 2016
 //
 ///////////////////////////////////////////////////////////
-import ReflexHandle from './ReflexHandle'
-import {getDataProps} from './utilities'
-import throttle from 'lodash.throttle'
-import Measure from 'react-measure'
-import PropTypes from 'prop-types'
-import React from 'react'
+import ReflexHandle from './ReflexHandle';
+import { getDataProps } from './utilities';
+import { ReflexContext } from './context';
+import throttle from 'lodash.throttle';
+import Measure from 'react-measure';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const toArray = (obj) => {
   return obj ? (Array.isArray(obj) ? obj : [obj]) : []
 }
 
 class SizeAwareReflexElement extends React.Component {
+
+  static contextType = ReflexContext;
 
   constructor (props) {
 
@@ -30,7 +33,7 @@ class SizeAwareReflexElement extends React.Component {
       width: "100%"
     }
   }
-  
+
   onResize = (rect) => {
 
     const { resizeHeight, resizeWidth } = this.props
@@ -53,7 +56,7 @@ class SizeAwareReflexElement extends React.Component {
 
     return React.Children.map(validChildren, (child) => {
 
-        if (this.props.withHandle || ReflexHandle.isA(child)) {
+        if (this.props.withHandle || ReflexHandle.isA(child, this.context || {})) {
           return React.cloneElement(child, {
             dimensions: propagateDimensions && this.state,
             ...child.props,
@@ -95,7 +98,7 @@ class SizeAwareReflexElement extends React.Component {
 
 
 class ReflexElement extends React.Component {
-  
+
   static propTypes = {
     propagateDimensions: PropTypes.bool,
     resizeHeight: PropTypes.bool,
@@ -103,7 +106,7 @@ class ReflexElement extends React.Component {
     className: PropTypes.string,
     size: PropTypes.number
   }
-  
+
   static defaultProps = {
     propagateDimensionsRate: 100,
     propagateDimensions: false,
@@ -112,6 +115,8 @@ class ReflexElement extends React.Component {
     direction: [1],
     className: ''
   }
+
+  static contextType = ReflexContext;
 
   constructor (props) {
     super (props)
@@ -154,7 +159,7 @@ class ReflexElement extends React.Component {
     })
 
     return React.Children.map(validChildren, (child) => {
-      if (this.props.withHandle || ReflexHandle.isA(child)) {
+      if (this.props.withHandle || ReflexHandle.isA(child, this.context || {})) {
         return React.cloneElement(child, {
           ...child.props,
           index: this.props.index - 1,

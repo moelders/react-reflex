@@ -3569,12 +3569,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ReflexSplitter */ "./src/lib/ReflexSplitter.js");
 /* harmony import */ var _ReflexEvents__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ReflexEvents */ "./src/lib/ReflexEvents.js");
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./utilities */ "./src/lib/utilities.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _Polyfills__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Polyfills */ "./src/lib/Polyfills.js");
-/* harmony import */ var _Polyfills__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_Polyfills__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./context */ "./src/lib/context.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _Polyfills__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Polyfills */ "./src/lib/Polyfills.js");
+/* harmony import */ var _Polyfills__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_Polyfills__WEBPACK_IMPORTED_MODULE_16__);
 
 
 
@@ -3603,15 +3604,16 @@ function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.
 
 
 
+
 var ReflexContainer = /*#__PURE__*/function (_React$Component) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_8___default()(ReflexContainer, _React$Component);
   /////////////////////////////////////////////////////////
   // orientation: Orientation of the layout container
-  //              valid values are ['horizontal', 'vertical'] 
+  //              valid values are ['horizontal', 'vertical']
   // maxRecDepth: Maximun recursion depth to solve initial flex
   //              of layout elements based on user provided values
-  // className: Space separated classnames to apply custom styles 
-  //            to the layout container  
+  // className: Space separated classnames to apply custom styles
+  //            to the layout container
   // style: allows passing inline style to the container
   /////////////////////////////////////////////////////////
 
@@ -3672,7 +3674,7 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
         return element.ref;
       }) : [];
       var elements = _this.children.filter(function (child) {
-        return !_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(child) && resizedRefs.includes(child.ref);
+        return !_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(child, _this.contextValue) && resizedRefs.includes(child.ref);
       });
       _this.emitElementsEvent(elements, 'onStopResize');
       _this.setState({
@@ -3708,7 +3710,10 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
     _this.state = {
       flexData: []
     };
-    _this.ref = react__WEBPACK_IMPORTED_MODULE_14___default.a.createRef();
+    _this.ref = react__WEBPACK_IMPORTED_MODULE_15___default.a.createRef();
+    _this.contextValue = {
+      components: _this.props.components
+    };
     return _this;
   }
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(ReflexContainer, [{
@@ -3764,9 +3769,9 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
 
     //   const children = this.getValidChildren(props)
 
-    //   if (children.length !== this.state.flexData.length || 
-    //     props.orientation !== this.props.orientation || 
-    //     this.flexHasChanged(props)) 
+    //   if (children.length !== this.state.flexData.length ||
+    //     props.orientation !== this.props.orientation ||
+    //     this.flexHasChanged(props))
     //   {
     //     const flexData = this.computeFlexData(
     //       children, props)
@@ -3784,7 +3789,7 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
     //       windowResizeAware: props.windowResizeAware
     //     })
     //   }
-    // } 
+    // }
 
     /////////////////////////////////////////////////////////
     // attempts to preserve current flex on window resize
@@ -3943,13 +3948,13 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
       if (direction > 0) {
         if (idx < this.children.length - 2) {
           var child = this.children[idx + 2];
-          var typeCheck = _ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(child);
+          var typeCheck = _ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(child, this.contextValue);
           return typeCheck && child.props.propagate;
         }
       } else {
         if (idx > 2) {
           var _child = this.children[idx - 2];
-          var _typeCheck = _ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(_child);
+          var _typeCheck = _ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(_child, this.contextValue);
           return _typeCheck && _child.props.propagate;
         }
       }
@@ -4141,7 +4146,7 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
       var pixelFlex = this.computePixelFlex(props.orientation);
       var computeFreeFlex = function computeFreeFlex(flexData) {
         return flexData.reduce(function (sum, entry) {
-          if (!_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry) && entry.constrained) {
+          if (!_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry, _this3.contextValue) && entry.constrained) {
             return sum - entry.flex;
           }
           return sum;
@@ -4149,7 +4154,7 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
       };
       var computeFreeElements = function computeFreeElements(flexData) {
         return flexData.reduce(function (sum, entry) {
-          if (!_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry) && !entry.constrained) {
+          if (!_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry, _this3.contextValue) && !entry.constrained) {
             return sum + 1;
           }
           return sum;
@@ -4174,7 +4179,7 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
         var freeElements = computeFreeElements(flexDataIn);
         var freeFlex = computeFreeFlex(flexDataIn);
         var flexDataOut = flexDataIn.map(function (entry) {
-          if (_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry)) {
+          if (_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry, _this3.contextValue)) {
             return entry;
           }
           var proposedFlex = !entry.constrained ? freeFlex / freeElements : entry.flex;
@@ -4191,8 +4196,8 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
       var flexData = computeFlexDataRec(flexDataInit);
       return flexData.map(function (entry) {
         return {
-          flex: !_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry) ? entry.flex : 0.0,
-          ref: react__WEBPACK_IMPORTED_MODULE_14___default.a.createRef()
+          flex: !_ReflexSplitter__WEBPACK_IMPORTED_MODULE_10__["default"].isA(entry, _this3.contextValue) ? entry.flex : 0.0,
+          ref: react__WEBPACK_IMPORTED_MODULE_15___default.a.createRef()
         };
       });
     }
@@ -4219,9 +4224,9 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this4 = this;
       var className = [this.state.resizing ? 'reflex-resizing' : ''].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_2___default()(this.props.className.split(' ')), [this.props.orientation, 'reflex-container']).join(' ').trim();
-      this.children = react__WEBPACK_IMPORTED_MODULE_14___default.a.Children.map(this.getValidChildren(), function (child, index) {
+      this.children = react__WEBPACK_IMPORTED_MODULE_15___default.a.Children.map(this.getValidChildren(), function (child, index) {
         if (index > _this4.state.flexData.length - 1) {
-          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_14___default.a.createElement("div", null);
+          return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("div", null);
         }
         var flexData = _this4.state.flexData[index];
         var newProps = _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_1___default()({}, child.props, {
@@ -4233,13 +4238,15 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
           ref: flexData.ref,
           index: index
         });
-        return react__WEBPACK_IMPORTED_MODULE_14___default.a.cloneElement(child, newProps);
+        return react__WEBPACK_IMPORTED_MODULE_15___default.a.cloneElement(child, newProps);
       });
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_14___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, Object(_utilities__WEBPACK_IMPORTED_MODULE_12__["getDataProps"])(this.props), {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement(_context__WEBPACK_IMPORTED_MODULE_13__["ReflexProvider"], {
+        value: this.contextValue
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_15___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({}, Object(_utilities__WEBPACK_IMPORTED_MODULE_12__["getDataProps"])(this.props), {
         style: this.props.style,
         className: className,
         ref: this.ref
-      }), this.children);
+      }), this.children));
     }
   }, {
     key: "__reactstandin__regenerateByEval",
@@ -4250,20 +4257,25 @@ var ReflexContainer = /*#__PURE__*/function (_React$Component) {
     }
   }]);
   return ReflexContainer;
-}(react__WEBPACK_IMPORTED_MODULE_14___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_15___default.a.Component);
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(ReflexContainer, "propTypes", {
-  windowResizeAware: prop_types__WEBPACK_IMPORTED_MODULE_13___default.a.bool,
-  orientation: prop_types__WEBPACK_IMPORTED_MODULE_13___default.a.oneOf(['horizontal', 'vertical']),
-  maxRecDepth: prop_types__WEBPACK_IMPORTED_MODULE_13___default.a.number,
-  className: prop_types__WEBPACK_IMPORTED_MODULE_13___default.a.string,
-  style: prop_types__WEBPACK_IMPORTED_MODULE_13___default.a.object
+  windowResizeAware: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.bool,
+  orientation: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.oneOf(['horizontal', 'vertical']),
+  maxRecDepth: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.number,
+  className: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.string,
+  style: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.object,
+  components: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.shape({
+    Splitter: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.elementType,
+    Handle: prop_types__WEBPACK_IMPORTED_MODULE_14___default.a.elementType
+  })
 });
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(ReflexContainer, "defaultProps", {
   orientation: 'horizontal',
   windowResizeAware: false,
   maxRecDepth: 100,
   className: '',
-  style: {}
+  style: {},
+  components: {}
 });
 
 ;
@@ -4273,7 +4285,7 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_9___default()(Ref
   if (!reactHotLoader) {
     return;
   }
-  reactHotLoader.register(ReflexContainer, "ReflexContainer", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexContainer.js");
+  reactHotLoader.register(ReflexContainer, "ReflexContainer", "/home/ps/projects/react-reflex/src/lib/ReflexContainer.js");
   leaveModule(module);
 })();
 ;
@@ -4316,13 +4328,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _ReflexHandle__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ReflexHandle */ "./src/lib/ReflexHandle.js");
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./utilities */ "./src/lib/utilities.js");
-/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! lodash.throttle */ "./node_modules/lodash.throttle/index.js");
-/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var react_measure__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-measure */ "./node_modules/react-measure/dist/index.esm.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./context */ "./src/lib/context.js");
+/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! lodash.throttle */ "./node_modules/lodash.throttle/index.js");
+/* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var react_measure__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-measure */ "./node_modules/react-measure/dist/index.esm.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_18__);
 
 
 
@@ -4357,6 +4370,7 @@ function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.
 
 
 
+
 var toArray = function toArray(obj) {
   return obj ? Array.isArray(obj) ? obj : [obj] : [];
 };
@@ -4379,7 +4393,7 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
         width: width
       }));
     });
-    _this.setDimensions = lodash_throttle__WEBPACK_IMPORTED_MODULE_14___default()(function (dimensions) {
+    _this.setDimensions = lodash_throttle__WEBPACK_IMPORTED_MODULE_15___default()(function (dimensions) {
       _this.setState(dimensions);
     }, _this.props.propagateDimensionsRate / 1000);
     _this.state = {
@@ -4396,9 +4410,9 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
       var validChildren = toArray(this.props.children).filter(function (child) {
         return !!child;
       });
-      return react__WEBPACK_IMPORTED_MODULE_17___default.a.Children.map(validChildren, function (child) {
-        if (_this2.props.withHandle || _ReflexHandle__WEBPACK_IMPORTED_MODULE_12__["default"].isA(child)) {
-          return react__WEBPACK_IMPORTED_MODULE_17___default.a.cloneElement(child, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_4___default()({
+      return react__WEBPACK_IMPORTED_MODULE_18___default.a.Children.map(validChildren, function (child) {
+        if (_this2.props.withHandle || _ReflexHandle__WEBPACK_IMPORTED_MODULE_12__["default"].isA(child, _this2.context || {})) {
+          return react__WEBPACK_IMPORTED_MODULE_18___default.a.cloneElement(child, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_4___default()({
             dimensions: propagateDimensions && _this2.state
           }, child.props, {
             index: _this2.props.index - 1,
@@ -4406,7 +4420,7 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
           }));
         }
         if (propagateDimensions) {
-          return react__WEBPACK_IMPORTED_MODULE_17___default.a.cloneElement(child, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_4___default()({}, child.props, {
+          return react__WEBPACK_IMPORTED_MODULE_18___default.a.cloneElement(child, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_4___default()({}, child.props, {
             dimensions: _this2.state
           }));
         }
@@ -4417,15 +4431,15 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       var _this3 = this;
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_17___default.a.createElement(react_measure__WEBPACK_IMPORTED_MODULE_15__["default"], {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(react_measure__WEBPACK_IMPORTED_MODULE_16__["default"], {
         bounds: true,
         onResize: this.onResize
       }, function (_ref) {
         var measureRef = _ref.measureRef;
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_17___default.a.createElement("div", {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", {
           ref: measureRef,
           className: "reflex-size-aware"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_17___default.a.createElement("div", {
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", {
           style: _this3.state
         }, _this3.renderChildren()));
       });
@@ -4439,7 +4453,8 @@ var SizeAwareReflexElement = /*#__PURE__*/function (_React$Component) {
     }
   }]);
   return SizeAwareReflexElement;
-}(react__WEBPACK_IMPORTED_MODULE_17___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_18___default.a.Component);
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11___default()(SizeAwareReflexElement, "contextType", _context__WEBPACK_IMPORTED_MODULE_14__["ReflexContext"]);
 var ReflexElement = /*#__PURE__*/function (_React$Component2) {
   _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_10___default()(ReflexElement, _React$Component2);
   function ReflexElement(props) {
@@ -4511,9 +4526,9 @@ var ReflexElement = /*#__PURE__*/function (_React$Component2) {
       var validChildren = toArray(this.props.children).filter(function (child) {
         return !!child;
       });
-      return react__WEBPACK_IMPORTED_MODULE_17___default.a.Children.map(validChildren, function (child) {
-        if (_this5.props.withHandle || _ReflexHandle__WEBPACK_IMPORTED_MODULE_12__["default"].isA(child)) {
-          return react__WEBPACK_IMPORTED_MODULE_17___default.a.cloneElement(child, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_4___default()({}, child.props, {
+      return react__WEBPACK_IMPORTED_MODULE_18___default.a.Children.map(validChildren, function (child) {
+        if (_this5.props.withHandle || _ReflexHandle__WEBPACK_IMPORTED_MODULE_12__["default"].isA(child, _this5.context || {})) {
+          return react__WEBPACK_IMPORTED_MODULE_18___default.a.cloneElement(child, _babel_runtime_helpers_objectSpread__WEBPACK_IMPORTED_MODULE_4___default()({}, child.props, {
             index: _this5.props.index - 1,
             events: _this5.props.events
           }));
@@ -4530,11 +4545,11 @@ var ReflexElement = /*#__PURE__*/function (_React$Component2) {
         flexShrink: 1,
         flexBasis: '0%'
       });
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_17___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({}, Object(_utilities__WEBPACK_IMPORTED_MODULE_13__["getDataProps"])(this.props), {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({}, Object(_utilities__WEBPACK_IMPORTED_MODULE_13__["getDataProps"])(this.props), {
         ref: this.props.innerRef,
         className: className,
         style: style
-      }), this.props.propagateDimensions ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_17___default.a.createElement(SizeAwareReflexElement, this.props) : this.renderChildren());
+      }), this.props.propagateDimensions ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(SizeAwareReflexElement, this.props) : this.renderChildren());
     }
   }, {
     key: "__reactstandin__regenerateByEval",
@@ -4555,13 +4570,13 @@ var ReflexElement = /*#__PURE__*/function (_React$Component2) {
     }
   }]);
   return ReflexElement;
-}(react__WEBPACK_IMPORTED_MODULE_17___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_18___default.a.Component);
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11___default()(ReflexElement, "propTypes", {
-  propagateDimensions: prop_types__WEBPACK_IMPORTED_MODULE_16___default.a.bool,
-  resizeHeight: prop_types__WEBPACK_IMPORTED_MODULE_16___default.a.bool,
-  resizeWidth: prop_types__WEBPACK_IMPORTED_MODULE_16___default.a.bool,
-  className: prop_types__WEBPACK_IMPORTED_MODULE_16___default.a.string,
-  size: prop_types__WEBPACK_IMPORTED_MODULE_16___default.a.number
+  propagateDimensions: prop_types__WEBPACK_IMPORTED_MODULE_17___default.a.bool,
+  resizeHeight: prop_types__WEBPACK_IMPORTED_MODULE_17___default.a.bool,
+  resizeWidth: prop_types__WEBPACK_IMPORTED_MODULE_17___default.a.bool,
+  className: prop_types__WEBPACK_IMPORTED_MODULE_17___default.a.string,
+  size: prop_types__WEBPACK_IMPORTED_MODULE_17___default.a.number
 });
 _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11___default()(ReflexElement, "defaultProps", {
   propagateDimensionsRate: 100,
@@ -4571,8 +4586,9 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11___default()(Re
   direction: [1],
   className: ''
 });
-var _default = react__WEBPACK_IMPORTED_MODULE_17___default.a.forwardRef(function (props, ref) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_17___default.a.createElement(ReflexElement, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_11___default()(ReflexElement, "contextType", _context__WEBPACK_IMPORTED_MODULE_14__["ReflexContext"]);
+var _default = react__WEBPACK_IMPORTED_MODULE_18___default.a.forwardRef(function (props, ref) {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_18___default.a.createElement(ReflexElement, _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_1___default()({
     innerRef: ref
   }, props));
 });
@@ -4584,10 +4600,10 @@ var _default = react__WEBPACK_IMPORTED_MODULE_17___default.a.forwardRef(function
   if (!reactHotLoader) {
     return;
   }
-  reactHotLoader.register(toArray, "toArray", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexElement.js");
-  reactHotLoader.register(SizeAwareReflexElement, "SizeAwareReflexElement", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexElement.js");
-  reactHotLoader.register(ReflexElement, "ReflexElement", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexElement.js");
-  reactHotLoader.register(_default, "default", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexElement.js");
+  reactHotLoader.register(toArray, "toArray", "/home/ps/projects/react-reflex/src/lib/ReflexElement.js");
+  reactHotLoader.register(SizeAwareReflexElement, "SizeAwareReflexElement", "/home/ps/projects/react-reflex/src/lib/ReflexElement.js");
+  reactHotLoader.register(ReflexElement, "ReflexElement", "/home/ps/projects/react-reflex/src/lib/ReflexElement.js");
+  reactHotLoader.register(_default, "default", "/home/ps/projects/react-reflex/src/lib/ReflexElement.js");
   leaveModule(module);
 })();
 ;
@@ -4695,8 +4711,8 @@ var _default = ReflexEvents;
   if (!reactHotLoader) {
     return;
   }
-  reactHotLoader.register(ReflexEvents, "ReflexEvents", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexEvents.js");
-  reactHotLoader.register(_default, "default", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexEvents.js");
+  reactHotLoader.register(ReflexEvents, "ReflexEvents", "/home/ps/projects/react-reflex/src/lib/ReflexEvents.js");
+  reactHotLoader.register(_default, "default", "/home/ps/projects/react-reflex/src/lib/ReflexEvents.js");
   leaveModule(module);
 })();
 ;
@@ -4883,12 +4899,12 @@ var ReflexHandle = /*#__PURE__*/function (_React$Component) {
     }
   }], [{
     key: "isA",
-    value: function isA(element) {
-      var _element$props;
-      if (!element) {
-        return false;
-      }
-      return ( true ? element.type === /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_11___default.a.createElement(ReflexHandle, null).type : undefined) || element.name === 'reflex-handle' || ((_element$props = element.props) === null || _element$props === void 0 ? void 0 : _element$props.name) === 'reflex-handle';
+    value: function isA(element, _ref) {
+      var components = _ref.components;
+      var _ref2 = components || {},
+        _ref2$Handle = _ref2.Handle,
+        _Handle = _ref2$Handle === void 0 ? ReflexHandle : _ref2$Handle;
+      return element.type === _Handle || element.type.displayName === _Handle.displayName;
     }
   }]);
   return ReflexHandle;
@@ -4919,7 +4935,7 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Ref
   if (!reactHotLoader) {
     return;
   }
-  reactHotLoader.register(ReflexHandle, "ReflexHandle", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexHandle.js");
+  reactHotLoader.register(ReflexHandle, "ReflexHandle", "/home/ps/projects/react-reflex/src/lib/ReflexHandle.js");
   leaveModule(module);
 })();
 ;
@@ -5112,12 +5128,12 @@ var ReflexSplitter = /*#__PURE__*/function (_React$Component) {
     // or wraps a splitter
     //
     /////////////////////////////////////////////////////////
-    function isA(element) {
-      var _element$props;
-      if (!element) {
-        return false;
-      }
-      return ( true ? element.type === /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_11___default.a.createElement(ReflexSplitter, null).type : undefined) || element.name === 'reflex-splitter' || ((_element$props = element.props) === null || _element$props === void 0 ? void 0 : _element$props.name) === 'reflex-splitter';
+    function isA(element, _ref) {
+      var components = _ref.components;
+      var _ref2 = components || {},
+        _ref2$Splitter = _ref2.Splitter,
+        _Splitter = _ref2$Splitter === void 0 ? ReflexSplitter : _ref2$Splitter;
+      return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
     }
   }]);
   return ReflexSplitter;
@@ -5148,7 +5164,44 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Ref
   if (!reactHotLoader) {
     return;
   }
-  reactHotLoader.register(ReflexSplitter, "ReflexSplitter", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/ReflexSplitter.js");
+  reactHotLoader.register(ReflexSplitter, "ReflexSplitter", "/home/ps/projects/react-reflex/src/lib/ReflexSplitter.js");
+  leaveModule(module);
+})();
+;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/harmony-module.js */ "./node_modules/webpack/buildin/harmony-module.js")(module)))
+
+/***/ }),
+
+/***/ "./src/lib/context.js":
+/*!****************************!*\
+  !*** ./src/lib/context.js ***!
+  \****************************/
+/*! exports provided: ReflexContext, ReflexProvider */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(module) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReflexContext", function() { return ReflexContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReflexProvider", function() { return ReflexProvider; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+(function () {
+  var enterModule = __webpack_require__(/*! react-hot-loader */ "./node_modules/react-hot-loader/index.js").enterModule;
+  enterModule && enterModule(module);
+})();
+
+var ReflexContext = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])();
+var ReflexProvider = ReflexContext.Provider;
+
+;
+(function () {
+  var reactHotLoader = __webpack_require__(/*! react-hot-loader */ "./node_modules/react-hot-loader/index.js").default;
+  var leaveModule = __webpack_require__(/*! react-hot-loader */ "./node_modules/react-hot-loader/index.js").leaveModule;
+  if (!reactHotLoader) {
+    return;
+  }
+  reactHotLoader.register(ReflexContext, "ReflexContext", "/home/ps/projects/react-reflex/src/lib/context.js");
+  reactHotLoader.register(ReflexProvider, "ReflexProvider", "/home/ps/projects/react-reflex/src/lib/context.js");
   leaveModule(module);
 })();
 ;
@@ -5342,8 +5395,8 @@ var getDataProps = function getDataProps(props) {
   if (!reactHotLoader) {
     return;
   }
-  reactHotLoader.register(Browser, "Browser", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/utilities.js");
-  reactHotLoader.register(getDataProps, "getDataProps", "/Users/pastojai/projects/github-ws/react-reflex/src/lib/utilities.js");
+  reactHotLoader.register(Browser, "Browser", "/home/ps/projects/react-reflex/src/lib/utilities.js");
+  reactHotLoader.register(getDataProps, "getDataProps", "/home/ps/projects/react-reflex/src/lib/utilities.js");
   leaveModule(module);
 })();
 ;
