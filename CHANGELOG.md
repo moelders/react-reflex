@@ -1,3 +1,7 @@
+## 4.3.2
+
+- Updated `<ReflexHandle />` and `<ReflexSplitter />` type checking.
+
 ## 4.3.1
 
 - Fixed invalid package dependency resolution.

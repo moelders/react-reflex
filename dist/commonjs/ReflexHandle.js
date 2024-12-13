@@ -139,12 +139,12 @@ var ReflexHandle = exports.default = /*#__PURE__*/function (_React$Component) {
     }
   }], [{
     key: "isA",
-    value: function isA(element) {
-      var _element$props;
-      if (!element) {
-        return false;
-      }
-      return (process.env.NODE_ENV === 'development' ? element.type === /*#__PURE__*/_react.default.createElement(ReflexHandle, null).type : element.type === ReflexHandle) || element.name === 'reflex-handle' || ((_element$props = element.props) === null || _element$props === void 0 ? void 0 : _element$props.name) === 'reflex-handle';
+    value: function isA(element, _ref) {
+      var components = _ref.components;
+      var _ref2 = components || {},
+        _ref2$Handle = _ref2.Handle,
+        _Handle = _ref2$Handle === void 0 ? ReflexHandle : _ref2$Handle;
+      return element.type === _Handle || element.type.displayName === _Handle.displayName;
     }
   }]);
   return ReflexHandle;

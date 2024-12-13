@@ -10,12 +10,13 @@ import { getDataProps } from './utilities';
 import PropTypes from 'prop-types';
 import React from 'react';
 export default class ReflexHandle extends React.Component {
-  static isA(element) {
-    var _element$props;
-    if (!element) {
-      return false;
-    }
-    return (process.env.NODE_ENV === 'development' ? element.type === /*#__PURE__*/React.createElement(ReflexHandle, null).type : element.type === ReflexHandle) || element.name === 'reflex-handle' || ((_element$props = element.props) === null || _element$props === void 0 ? void 0 : _element$props.name) === 'reflex-handle';
+  static isA(element, {
+    components
+  }) {
+    const {
+      Handle: _Handle = ReflexHandle
+    } = components || {};
+    return element.type === _Handle || element.type.displayName === _Handle.displayName;
   }
   constructor(props) {
     super(props);
