@@ -38,10 +38,15 @@ export default class ReflexHandle extends React.Component {
     style: {}
   }
 
+  static displayName = "ReflexHandle";
+
   static isA (element, { components }) {
     const { Handle: _Handle = ReflexHandle } = components || {};
+    const { type } = element || {};
+    const { displayName } = type || {};
+    const { displayName: handleDisplayName = ReflexHandle.displayName } = _Handle || {};
 
-    return element.type === _Handle || element.type.displayName === _Handle.displayName;
+    return type === _Handle || displayName === handleDisplayName;
   }
 
   constructor (props) {

@@ -150,7 +150,14 @@ var ReflexSplitter = exports.default = /*#__PURE__*/function (_React$Component) 
       var _ref2 = components || {},
         _ref2$Splitter = _ref2.Splitter,
         _Splitter = _ref2$Splitter === void 0 ? ReflexSplitter : _ref2$Splitter;
-      return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
+      var _ref3 = element || {},
+        type = _ref3.type;
+      var _ref4 = type || {},
+        displayName = _ref4.displayName;
+      var _ref5 = _Splitter || {},
+        _ref5$displayName = _ref5.displayName,
+        splitterDisplayName = _ref5$displayName === void 0 ? ReflexSplitter.displayName : _ref5$displayName;
+      return type === _Splitter || displayName === splitterDisplayName;
     }
   }]);
   return ReflexSplitter;
@@ -173,3 +180,4 @@ var ReflexSplitter = exports.default = /*#__PURE__*/function (_React$Component) 
   className: '',
   style: {}
 });
+(0, _defineProperty2.default)(ReflexSplitter, "displayName", "ReflexSplitter");

@@ -16,7 +16,16 @@ export default class ReflexHandle extends React.Component {
     const {
       Handle: _Handle = ReflexHandle
     } = components || {};
-    return element.type === _Handle || element.type.displayName === _Handle.displayName;
+    const {
+      type
+    } = element || {};
+    const {
+      displayName
+    } = type || {};
+    const {
+      displayName: handleDisplayName = ReflexHandle.displayName
+    } = _Handle || {};
+    return type === _Handle || displayName === handleDisplayName;
   }
   constructor(props) {
     super(props);
@@ -139,3 +148,4 @@ _defineProperty(ReflexHandle, "defaultProps", {
   className: '',
   style: {}
 });
+_defineProperty(ReflexHandle, "displayName", "ReflexHandle");

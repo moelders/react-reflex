@@ -37,6 +37,8 @@ export default class ReflexSplitter extends React.Component {
     style: {}
   }
 
+  static displayName = "ReflexSplitter";
+
   /////////////////////////////////////////////////////////
   // Determines if element is a splitter
   // or wraps a splitter
@@ -44,8 +46,11 @@ export default class ReflexSplitter extends React.Component {
   /////////////////////////////////////////////////////////
   static isA (element, { components }) {
     const { Splitter: _Splitter = ReflexSplitter } = components || {};
+    const { type } = element || {};
+    const { displayName } = type || {};
+    const { displayName: splitterDisplayName = ReflexSplitter.displayName } = _Splitter || {};
 
-    return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
+    return type === _Splitter || displayName === splitterDisplayName;
   }
 
   constructor (props) {

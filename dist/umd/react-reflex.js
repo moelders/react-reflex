@@ -4904,7 +4904,14 @@ var ReflexHandle = /*#__PURE__*/function (_React$Component) {
       var _ref2 = components || {},
         _ref2$Handle = _ref2.Handle,
         _Handle = _ref2$Handle === void 0 ? ReflexHandle : _ref2$Handle;
-      return element.type === _Handle || element.type.displayName === _Handle.displayName;
+      var _ref3 = element || {},
+        type = _ref3.type;
+      var _ref4 = type || {},
+        displayName = _ref4.displayName;
+      var _ref5 = _Handle || {},
+        _ref5$displayName = _ref5.displayName,
+        handleDisplayName = _ref5$displayName === void 0 ? ReflexHandle.displayName : _ref5$displayName;
+      return type === _Handle || displayName === handleDisplayName;
     }
   }]);
   return ReflexHandle;
@@ -4927,6 +4934,7 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Ref
   className: '',
   style: {}
 });
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(ReflexHandle, "displayName", "ReflexHandle");
 
 ;
 (function () {
@@ -5133,7 +5141,14 @@ var ReflexSplitter = /*#__PURE__*/function (_React$Component) {
       var _ref2 = components || {},
         _ref2$Splitter = _ref2.Splitter,
         _Splitter = _ref2$Splitter === void 0 ? ReflexSplitter : _ref2$Splitter;
-      return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
+      var _ref3 = element || {},
+        type = _ref3.type;
+      var _ref4 = type || {},
+        displayName = _ref4.displayName;
+      var _ref5 = _Splitter || {},
+        _ref5$displayName = _ref5.displayName,
+        splitterDisplayName = _ref5$displayName === void 0 ? ReflexSplitter.displayName : _ref5$displayName;
+      return type === _Splitter || displayName === splitterDisplayName;
     }
   }]);
   return ReflexSplitter;
@@ -5156,6 +5171,7 @@ _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(Ref
   className: '',
   style: {}
 });
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(ReflexSplitter, "displayName", "ReflexSplitter");
 
 ;
 (function () {

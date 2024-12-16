@@ -21,7 +21,16 @@ export default class ReflexSplitter extends React.Component {
     const {
       Splitter: _Splitter = ReflexSplitter
     } = components || {};
-    return element.type === _Splitter || element.type.displayName === _Splitter.displayName;
+    const {
+      type
+    } = element || {};
+    const {
+      displayName
+    } = type || {};
+    const {
+      displayName: splitterDisplayName = ReflexSplitter.displayName
+    } = _Splitter || {};
+    return type === _Splitter || displayName === splitterDisplayName;
   }
   constructor(props) {
     super(props);
@@ -144,3 +153,4 @@ _defineProperty(ReflexSplitter, "defaultProps", {
   className: '',
   style: {}
 });
+_defineProperty(ReflexSplitter, "displayName", "ReflexSplitter");
