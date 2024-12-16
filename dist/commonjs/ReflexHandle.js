@@ -144,7 +144,14 @@ var ReflexHandle = exports.default = /*#__PURE__*/function (_React$Component) {
       var _ref2 = components || {},
         _ref2$Handle = _ref2.Handle,
         _Handle = _ref2$Handle === void 0 ? ReflexHandle : _ref2$Handle;
-      return element.type === _Handle || element.type.displayName === _Handle.displayName;
+      var _ref3 = element || {},
+        type = _ref3.type;
+      var _ref4 = type || {},
+        displayName = _ref4.displayName;
+      var _ref5 = _Handle || {},
+        _ref5$displayName = _ref5.displayName,
+        handleDisplayName = _ref5$displayName === void 0 ? ReflexHandle.displayName : _ref5$displayName;
+      return type === _Handle || displayName === handleDisplayName;
     }
   }]);
   return ReflexHandle;
@@ -167,3 +174,4 @@ var ReflexHandle = exports.default = /*#__PURE__*/function (_React$Component) {
   className: '',
   style: {}
 });
+(0, _defineProperty2.default)(ReflexHandle, "displayName", "ReflexHandle");

@@ -1,3 +1,7 @@
+## 4.3.3
+
+- Fixed dom element validation in `<ReflexHandle />` and `<ReflexSplitter />` components.
+
 ## 4.3.2
 
 - Updated `<ReflexHandle />` and `<ReflexSplitter />` type checking.
